@@ -67,6 +67,15 @@ h1{font-family:var(--display);font-size:calc(clamp(27px,4.4vw,42px)*var(--fs));l
 .topbar .ctl .seg button{white-space:nowrap;flex:none}
 nav.tabs{background:var(--bg);border-bottom:1px solid var(--line);display:flex;overflow-x:auto;scrollbar-width:none}
 nav.tabs::-webkit-scrollbar{display:none}
+.hsw{position:relative;min-width:0;max-width:100%}
+.hsw>.harr{position:absolute;top:0;bottom:1px;z-index:2;width:36px;border:0;padding:0;cursor:pointer;color:var(--accent);font-size:24px;line-height:1;display:flex;align-items:center}
+.hsw>.harr.l{left:0;justify-content:flex-start;padding-left:2px;background:linear-gradient(90deg,var(--bg) 55%,transparent)}
+.hsw>.harr.r{right:0;justify-content:flex-end;padding-right:2px;background:linear-gradient(270deg,var(--bg) 55%,transparent)}
+.hsw>.harr[hidden]{display:none}
+.hsw>.harr:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.hscroll{cursor:grab;user-select:none;-webkit-user-select:none;overscroll-behavior-x:contain}
+.hscroll.drag{cursor:grabbing}
+.hscroll.drag a,.hscroll.drag button{pointer-events:none}
 nav.tabs a{white-space:nowrap;text-decoration:none;color:var(--muted);font-weight:600;font-size:calc(14px*var(--fs));padding:12px 12px 10px;border-bottom:3px solid transparent}
 nav.tabs a:hover{color:var(--ink)}
 nav.tabs a.on{color:var(--accent);border-bottom-color:var(--accent)}
@@ -624,6 +633,27 @@ function syncTopbar(){const r=$("todo").getBoundingClientRect(),c=$("todoCtl"),t
 addEventListener("scroll",()=>{syncTopbar();let cur=secs[0];for(const s of secs){if($(s).getBoundingClientRect().top<120)cur=s}
   document.querySelectorAll("#tabs a").forEach(a=>a.classList.toggle("on",a.getAttribute("href")==="#"+cur))},{passive:true});
 addEventListener("resize",syncTopbar);
+/* ── horizontal scrolling for tab rows: arrows when overflowing, wheel, mouse drag ── */
+function hscroll(el,label){const w=document.createElement("div");w.className="hsw";el.parentNode.insertBefore(w,el);w.appendChild(el);el.classList.add("hscroll");
+  const mk=(c,t)=>{const b=document.createElement("button");b.type="button";b.className="harr "+c;b.textContent=t;b.hidden=true;b.setAttribute("aria-label",(c==="l"?"Scroll left":"Scroll right")+" — "+label);w.appendChild(b);return b};
+  const L=mk("l","‹"),R=mk("r","›");
+  const upd=()=>{const over=el.scrollWidth>el.clientWidth+2;L.hidden=!over||el.scrollLeft<=2;R.hidden=!over||el.scrollLeft>=el.scrollWidth-el.clientWidth-2};
+  const step=d=>el.scrollBy({left:d*Math.max(160,el.clientWidth*0.6),behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"});
+  L.addEventListener("click",()=>step(-1));R.addEventListener("click",()=>step(1));
+  el.addEventListener("scroll",upd,{passive:true});addEventListener("resize",upd);new MutationObserver(upd).observe(el,{childList:true,subtree:true});
+  el.addEventListener("wheel",e=>{if(Math.abs(e.deltaY)>Math.abs(e.deltaX)&&el.scrollWidth>el.clientWidth+2){const max=el.scrollWidth-el.clientWidth;const nx=Math.min(max,Math.max(0,el.scrollLeft+e.deltaY));if(nx!==el.scrollLeft){el.scrollLeft=nx;e.preventDefault()}}},{passive:false});
+  let down=false,x0=0,s0=0,moved=false;
+  el.addEventListener("pointerdown",e=>{if(e.pointerType!=="mouse"||e.button!==0)return;down=true;moved=false;x0=e.clientX;s0=el.scrollLeft});
+  addEventListener("pointermove",e=>{if(!down)return;const dx=e.clientX-x0;if(!moved&&Math.abs(dx)>5){moved=true;el.classList.add("drag")}if(moved)el.scrollLeft=s0-dx});
+  addEventListener("pointerup",()=>{if(!down)return;down=false;if(moved)setTimeout(()=>el.classList.remove("drag"),0)});
+  el.addEventListener("click",e=>{if(moved){e.preventDefault();e.stopPropagation()}},true);
+  setTimeout(upd,0);return upd}
+const navUpd=hscroll($("tabs"),"menu");hscroll($("catSeg"),"categories");hscroll($("viewSeg"),"sort");
+/* keep the current section's tab visible in the menu row */
+let lastCur="";function revealTab(){const a=document.querySelector("#tabs a.on");if(!a)return;const n=$("tabs"),pad=40;
+  const l=a.offsetLeft-n.offsetLeft,r=l+a.offsetWidth;if(l<n.scrollLeft+pad)n.scrollTo({left:Math.max(0,l-pad),behavior:"smooth"});else if(r>n.scrollLeft+n.clientWidth-pad)n.scrollTo({left:r-n.clientWidth+pad,behavior:"smooth"})}
+addEventListener("scroll",()=>{const a=document.querySelector("#tabs a.on");const c=a?a.getAttribute("href"):"";if(c!==lastCur){lastCur=c;revealTab()}},{passive:true});
+
 /* after changing a nearby filter, jump back to the top of the list */
 ["catSeg","viewSeg"].forEach(id=>$(id).addEventListener("click",e=>{if(!e.target.closest("button"))return;
   requestAnimationFrame(()=>{const y=$("todo").getBoundingClientRect().top+scrollY-$("topbar").offsetHeight-8;if(scrollY>y)scrollTo({top:y})})}));
