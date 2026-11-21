@@ -90,6 +90,7 @@ h2{font-family:var(--display);font-size:calc(clamp(23px,3vw,28px)*var(--fs));mar
 .ic.req{border-left:4px solid var(--accent)}
 .ic .k{font-size:calc(11.5px*var(--fs));font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 .ic.req .k{color:var(--accent)}
+#depCards{max-width:820px}
 .ic h3{margin:0;font-size:calc(17px*var(--fs))}
 .ic p,.ic li{margin:0;font-size:calc(14.5px*var(--fs));color:var(--muted)}
 .ic b{color:var(--ink)}
@@ -166,6 +167,7 @@ footer p{margin:0}
     <a href="#before" data-t="nBefore"></a>
     <a href="#around" data-t="nAround"></a>
     <a href="#good" data-t="nGood"></a>
+    <a href="#dep" data-t="nDep"></a>
     <a href="#todo" data-t="nTodo"></a>
   </nav>
 
@@ -188,6 +190,11 @@ footer p{margin:0}
   <section id="good">
     <h2 data-t="nGood"></h2>
     <div class="info" id="goodCards"></div>
+  </section>
+
+  <section id="dep">
+    <h2 data-t="nDep"></h2>
+    <div class="info" id="depCards"></div>
   </section>
 
   <section id="todo">
@@ -232,7 +239,7 @@ en:{
   greet:"Welcome to Seoul!", sub:"Participant guide · 25–27 November 2026",
   hotelK:"Your hotel", pick:"Choose your hotel",
   hotelNote:"Participants stay at different hotels. Hotel details for each participant will be added to this guide soon.",
-  nSched:"Schedule", nBefore:"Before you fly", nAround:"Getting around", nGood:"Good to know", nTodo:"Things to do nearby",
+  nSched:"Schedule", nBefore:"Before you fly", nAround:"Getting around", nGood:"Good to know", nDep:"Departure", nTodo:"Things to do nearby",
   gmap:"Google Maps ↗", dir:"Directions ↗", nmap:"NAVER Map ↗", onMap:"Show on map", info:"Details ↗",
   schedNote:"Times follow the current plan and may change. Any update will be shared by the organiser.",
   days:[
@@ -247,7 +254,7 @@ en:{
       {t:"15:30–15:45", p:"Coffee break"},
       {t:"15:45–17:30", p:"1:1 meetings"}]},
     {dt:"Fri 27 Nov", h:"Departure", ev:[
-      {t:"", p:"Airport drop-off as arranged", w:"Pick-up time from your hotel will be sent to you individually. Leaving from Incheon? Register for ICN Smart Pass first — see Getting around."}]}
+      {t:"", p:"Airport drop-off as arranged", w:"Pick-up time from your hotel will be sent to you individually. Leaving from Incheon? Register for ICN Smart Pass first — see Departure."}]}
   ],
   before:[
     {req:true,k:"Required",h:"Korea e-Arrival Card",p:"All foreign visitors must submit Korea's e-Arrival Card online <b>within 3 days before arrival</b>. It is free. Have your passport and flight number ready, and use your hotel address above.",btn:["Fill out the e-Arrival Card ↗","https://www.e-arrivalcard.go.kr/"],note:"Use only the official government site (e-arrivalcard.go.kr). Sites that charge a fee are not official."},
@@ -259,7 +266,6 @@ en:{
   ],
   around:[
     {k:"Airports",h:"From the airport",list:["<b>Gimpo (GMP):</b> Subway Line 5 runs direct to Dongdaemun History & Culture Park Station (about 45–50 min).","<b>Incheon (ICN):</b> AREX train to Seoul Station, then Line 4 to Dongdaemun History & Culture Park (about 1 h 30 min in total), or a taxi (about 1 h or more, depending on traffic).","Booked an airport pick-up? Your details will be sent to you individually."]},
-    {k:"Departure · Incheon (ICN)",h:"ICN Smart Pass — faster departure",p:"Flying home from <b>Incheon Airport</b>? Register once in the free <b>ICN SmartPass</b> app and go from the departure entrance to your boarding gate with <b>face recognition</b> instead of showing your passport and boarding pass at each step.",list:["<b>1.</b> Scan your passport (avoid glare) — an e-passport is needed","<b>2.</b> Register your face in the app","<b>3.</b> Add your boarding pass: mobile QR code or paper barcode (skipped if it is added automatically)","No app? Register at a self check-in kiosk at the airport.","Still carry your passport and boarding pass — not in checked baggage. Ages 7+; under-14s need a guardian's consent. Face data is kept for 5 years."],links:[["App Store ↗","https://apps.apple.com/kr/app/icn-smartpass-%EC%9D%B8%EC%B2%9C%EA%B3%B5%ED%95%AD-%EC%8A%A4%EB%A7%88%ED%8A%B8%ED%8C%A8%EC%8A%A4/id6443837919"],["Google Play ↗","https://play.google.com/store/apps/details?id=kr.airport.android.smartpass"],["How it works (Incheon Airport) ↗","https://sps-mapi.airport.kr:8420/resources/html/info_smartpass.html"]]},
     {k:"Subway",h:"Stations near the hotel",p:"JW Marriott Dongdaemun Square is next to <b>Dongdaemun Station</b> (Lines 1 & 4) and a short walk from <b>Dongdaemun History & Culture Park Station</b> (Lines 2, 4 & 5)."},
     {k:"Transport card",h:"T-money card",p:"Buy and top up a <b>T-money</b> card with cash at convenience stores (GS25, CU, 7-Eleven) or subway stations. Tap in and out on the subway and buses; many taxis accept it too."},
     {k:"Taxis",h:"Taxis",p:"Taxis are plentiful and accept cards. The <b>Kakao T</b> app (English, accepts foreign cards) and <b>Uber</b> both work in Seoul. Show the driver the address in Korean — each place below has it on NAVER Map."},
@@ -271,6 +277,7 @@ en:{
     {k:"Phone",h:"Mobile data",p:"Buy an <b>eSIM</b> before you fly or a SIM card at the airport. Free Wi-Fi is common in hotels, cafés, subway stations and public places."},
     {k:"Emergency",h:"Emergency numbers",emerg:[["112","Police"],["119","Fire & ambulance"],["1330","Korea Travel Hotline · 24 h, multilingual"]]}
   ],
+  dep:[{k:"Departure · Incheon (ICN)",h:"ICN Smart Pass — faster departure",p:"Flying home from <b>Incheon Airport</b>? Register once in the free <b>ICN SmartPass</b> app and go from the departure entrance to your boarding gate with <b>face recognition</b> instead of showing your passport and boarding pass at each step.",list:["<b>1.</b> Scan your passport (avoid glare) — an e-passport is needed","<b>2.</b> Register your face in the app","<b>3.</b> Add your boarding pass: mobile QR code or paper barcode (skipped if it is added automatically)","No app? Register at a self check-in kiosk at the airport.","Still carry your passport and boarding pass — not in checked baggage. Ages 7+; under-14s need a guardian's consent. Face data is kept for 5 years."],links:[["App Store ↗","https://apps.apple.com/kr/app/icn-smartpass-%EC%9D%B8%EC%B2%9C%EA%B3%B5%ED%95%AD-%EC%8A%A4%EB%A7%88%ED%8A%B8%ED%8C%A8%EC%8A%A4/id6443837919"],["Google Play ↗","https://play.google.com/store/apps/details?id=kr.airport.android.smartpass"],["How it works (Incheon Airport) ↗","https://sps-mapi.airport.kr:8420/resources/html/info_smartpass.html"]]}],
   cat:{"12":"Attractions","14":"Culture","39":"Food & cafés","38":"Shopping","28":"Walks & leisure","T":"City Tour Bus stops"},
   all:"All", vCat:"By category", vNear:"Nearest first",
   todoLead:h=>`Popular places in central Seoul (Jung-gu and Jongno-gu), sorted by distance from ${h}. Tap “Show on map” to see a place on the map.`,
@@ -286,7 +293,7 @@ es:{
   greet:"¡Bienvenidos a Seúl!", sub:"Guía para participantes · 25–27 de noviembre de 2026",
   hotelK:"Su hotel", pick:"Elija su hotel",
   hotelNote:"Los participantes se alojan en hoteles distintos. Pronto añadiremos a esta guía los datos del hotel de cada participante.",
-  nSched:"Programa", nBefore:"Antes de viajar", nAround:"Cómo moverse", nGood:"Información útil", nTodo:"Qué hacer cerca",
+  nSched:"Programa", nBefore:"Antes de viajar", nAround:"Cómo moverse", nGood:"Información útil", nDep:"Salida", nTodo:"Qué hacer cerca",
   gmap:"Google Maps ↗", dir:"Cómo llegar ↗", nmap:"NAVER Map ↗", onMap:"Ver en el mapa", info:"Más información ↗",
   schedNote:"Los horarios corresponden al plan actual y pueden cambiar. El organizador comunicará cualquier novedad.",
   days:[
@@ -301,7 +308,7 @@ es:{
       {t:"15:30–15:45", p:"Pausa café"},
       {t:"15:45–17:30", p:"Reuniones 1:1"}]},
     {dt:"Vie. 27 nov.", h:"Salida", ev:[
-      {t:"", p:"Traslado al aeropuerto según lo acordado", w:"Recibirá individualmente la hora de recogida en su hotel. ¿Sale desde Incheon? Regístrese antes en ICN Smart Pass; vea «Cómo moverse»."}]}
+      {t:"", p:"Traslado al aeropuerto según lo acordado", w:"Recibirá individualmente la hora de recogida en su hotel. ¿Sale desde Incheon? Regístrese antes en ICN Smart Pass; vea «Salida»."}]}
   ],
   before:[
     {req:true,k:"Obligatorio",h:"Tarjeta de llegada electrónica (e-Arrival Card)",p:"Todos los visitantes extranjeros deben presentar en línea la e-Arrival Card de Corea <b>en los 3 días anteriores a la llegada</b>. Es gratuita. Tenga a mano el pasaporte y el número de vuelo, y use la dirección de su hotel indicada arriba.",btn:["Rellenar la e-Arrival Card ↗","https://www.e-arrivalcard.go.kr/"],note:"Use solo la web oficial del gobierno (e-arrivalcard.go.kr). Las webs que cobran no son oficiales."},
@@ -313,7 +320,6 @@ es:{
   ],
   around:[
     {k:"Aeropuertos",h:"Desde el aeropuerto",list:["<b>Gimpo (GMP):</b> la línea 5 de metro va directa a la estación Dongdaemun History & Culture Park (unos 45–50 min).","<b>Incheon (ICN):</b> tren AREX hasta Seoul Station y luego línea 4 hasta Dongdaemun History & Culture Park (aprox. 1 h 30 min en total), o taxi (1 h o más, según el tráfico).","¿Ha reservado traslado? Recibirá los detalles individualmente."]},
-    {k:"Salida · Incheon (ICN)",h:"ICN Smart Pass — salida más rápida",p:"¿Vuelve desde el <b>aeropuerto de Incheon</b>? Regístrese una vez en la app gratuita <b>ICN SmartPass</b> y pase desde la entrada de salidas hasta la puerta de embarque con <b>reconocimiento facial</b>, sin mostrar el pasaporte y la tarjeta de embarque en cada control.",list:["<b>1.</b> Escanee su pasaporte (evite reflejos); se necesita pasaporte electrónico","<b>2.</b> Registre su rostro en la app","<b>3.</b> Añada su tarjeta de embarque: código QR móvil o código de barras en papel (no es necesario si se añade automáticamente)","¿Sin app? Puede registrarse en un quiosco de autofacturación del aeropuerto.","Lleve igualmente el pasaporte y la tarjeta de embarque, no en el equipaje facturado. A partir de 7 años; menores de 14 necesitan consentimiento de un tutor. Los datos faciales se guardan 5 años."],links:[["App Store ↗","https://apps.apple.com/kr/app/icn-smartpass-%EC%9D%B8%EC%B2%9C%EA%B3%B5%ED%95%AD-%EC%8A%A4%EB%A7%88%ED%8A%B8%ED%8C%A8%EC%8A%A4/id6443837919"],["Google Play ↗","https://play.google.com/store/apps/details?id=kr.airport.android.smartpass"],["Cómo funciona (aeropuerto de Incheon) ↗","https://sps-mapi.airport.kr:8420/resources/html/info_smartpass.html"]]},
     {k:"Metro",h:"Estaciones cerca del hotel",p:"El JW Marriott Dongdaemun Square está junto a la <b>estación Dongdaemun</b> (líneas 1 y 4) y a pocos minutos a pie de <b>Dongdaemun History & Culture Park</b> (líneas 2, 4 y 5)."},
     {k:"Tarjeta de transporte",h:"Tarjeta T-money",p:"Compre y recargue una tarjeta <b>T-money</b> en efectivo en tiendas de conveniencia (GS25, CU, 7-Eleven) o estaciones de metro. Pásela al entrar y salir del metro y del autobús; muchos taxis también la aceptan."},
     {k:"Taxis",h:"Taxis",p:"Hay muchos taxis y aceptan tarjeta. La app <b>Kakao T</b> (en inglés, acepta tarjetas extranjeras) y <b>Uber</b> funcionan en Seúl. Muestre al conductor la dirección en coreano: cada lugar de abajo la tiene en NAVER Map."},
@@ -325,6 +331,7 @@ es:{
     {k:"Teléfono",h:"Datos móviles",p:"Compre una <b>eSIM</b> antes de viajar o una tarjeta SIM en el aeropuerto. Hay wifi gratuito en hoteles, cafeterías, estaciones de metro y lugares públicos."},
     {k:"Emergencias",h:"Números de emergencia",emerg:[["112","Policía"],["119","Bomberos y ambulancia"],["1330","Línea de turismo de Corea · 24 h, multilingüe"]]}
   ],
+  dep:[{k:"Salida · Incheon (ICN)",h:"ICN Smart Pass — salida más rápida",p:"¿Vuelve desde el <b>aeropuerto de Incheon</b>? Regístrese una vez en la app gratuita <b>ICN SmartPass</b> y pase desde la entrada de salidas hasta la puerta de embarque con <b>reconocimiento facial</b>, sin mostrar el pasaporte y la tarjeta de embarque en cada control.",list:["<b>1.</b> Escanee su pasaporte (evite reflejos); se necesita pasaporte electrónico","<b>2.</b> Registre su rostro en la app","<b>3.</b> Añada su tarjeta de embarque: código QR móvil o código de barras en papel (no es necesario si se añade automáticamente)","¿Sin app? Puede registrarse en un quiosco de autofacturación del aeropuerto.","Lleve igualmente el pasaporte y la tarjeta de embarque, no en el equipaje facturado. A partir de 7 años; menores de 14 necesitan consentimiento de un tutor. Los datos faciales se guardan 5 años."],links:[["App Store ↗","https://apps.apple.com/kr/app/icn-smartpass-%EC%9D%B8%EC%B2%9C%EA%B3%B5%ED%95%AD-%EC%8A%A4%EB%A7%88%ED%8A%B8%ED%8C%A8%EC%8A%A4/id6443837919"],["Google Play ↗","https://play.google.com/store/apps/details?id=kr.airport.android.smartpass"],["Cómo funciona (aeropuerto de Incheon) ↗","https://sps-mapi.airport.kr:8420/resources/html/info_smartpass.html"]]}],
   cat:{"12":"Lugares de interés","14":"Cultura","39":"Comida y cafés","38":"Compras","28":"Paseos y ocio","T":"Paradas del City Tour Bus"},
   all:"Todo", vCat:"Por categoría", vNear:"Más cerca primero",
   todoLead:h=>`Lugares populares del centro de Seúl (Jung-gu y Jongno-gu), ordenados por distancia desde ${h}. Pulse «Ver en el mapa» para verlo en el mapa. Los nombres y descripciones están en inglés.`,
@@ -414,14 +421,14 @@ function renderAll(){
   document.querySelectorAll("#langs button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.lang===lang));
   document.querySelectorAll("#fsz button").forEach(b=>b.setAttribute("aria-pressed",+b.dataset.fs===FS));
   renderHotel();renderSchedule();
-  $("beforeCards").innerHTML=cards(t().before);$("aroundCards").innerHTML=cards(t().around);$("goodCards").innerHTML=cards(t().good);
+  $("beforeCards").innerHTML=cards(t().before);$("aroundCards").innerHTML=cards(t().around);$("goodCards").innerHTML=cards(t().good);$("depCards").innerHTML=cards(t().dep);
   renderPlaces();
   showMap(mapSel&&mapSel.i!=null?{...mapSel,label:mapSel.en}:(mapSel||hotelPlace()),false);
 }
 $("langs").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;lang=b.dataset.lang;store.set("stmLang",lang);renderAll()});
 $("fsz").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;FS=+b.dataset.fs;store.set("stmFs",FS);document.documentElement.style.setProperty("--fs",FS);renderAll()});
 document.documentElement.style.setProperty("--fs",FS);
-const secs=["schedule","before","around","good","todo"];
+const secs=["schedule","before","around","good","dep","todo"];
 addEventListener("scroll",()=>{let cur=secs[0];for(const s of secs){if($(s).getBoundingClientRect().top<120)cur=s}
   document.querySelectorAll("#tabs a").forEach(a=>a.classList.toggle("on",a.getAttribute("href")==="#"+cur))},{passive:true});
 renderAll();
