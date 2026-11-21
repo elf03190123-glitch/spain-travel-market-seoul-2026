@@ -103,7 +103,8 @@ h2{font-family:var(--display);font-size:calc(clamp(23px,3vw,28px)*var(--fs));mar
 .emerg span{font-size:calc(13px*var(--fs));color:var(--muted)}
 
 /* places + map */
-.ctl{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center}
+.ctl{display:flex;flex-direction:column;gap:10px;align-items:flex-start}
+#viewSeg button{font-weight:600}
 .seg{display:flex;flex-wrap:wrap;gap:6px}
 .seg button{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:5px 13px;font-size:calc(13.5px*var(--fs));cursor:pointer}
 .seg button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
@@ -253,8 +254,8 @@ footer p{margin:0}
     <h2 data-t="nTodo"></h2>
     <p class="lead" id="todoLead"></p>
     <div class="ctl">
-      <div class="seg" id="catSeg" role="group"></div>
       <div class="seg" id="viewSeg" role="group"></div>
+      <div class="seg" id="catSeg" role="group"></div>
     </div>
     <div class="split">
       <div id="list"></div>
