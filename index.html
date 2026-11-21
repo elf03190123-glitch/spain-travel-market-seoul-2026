@@ -179,7 +179,10 @@ h2{font-family:var(--display);font-size:calc(clamp(23px,3vw,28px)*var(--fs));mar
 .hs{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
 .hs li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 10px;align-items:center;padding:7px 6px;border-bottom:1px solid var(--line);cursor:pointer;border-radius:6px}
 .hs li:hover{background:var(--chip)}
-.hs li.on{background:var(--soft);outline:2px solid var(--accent);outline-offset:-2px}
+.hp{cursor:pointer}
+.hp.on{outline:2px solid var(--accent)}
+.hs li.on{background:var(--soft)}
+.hs li.on .nm{color:var(--accent)}
 .hs .nm{font-weight:600;font-size:calc(14.5px*var(--fs))}
 .hs .ko{font-size:calc(12.5px*var(--fs));color:var(--muted);margin-left:6px}
 .hs .ar{font-size:calc(12.5px*var(--fs));color:var(--muted)}
@@ -506,7 +509,12 @@ const nMap=p=>"https://map.naver.com/p/search/"+enc(String(p.ko).replace(/^\d+\.
 const embed=p=>"https://maps.google.com/maps?q="+enc(gq(p))+"&z="+(p.z||16)+"&hl="+lang+"&output=embed";
 /* routes: Google Maps embed (public transport) + NAVER Map (English) transit directions */
 const SEOUL_STN={en:"Seoul Station",lat:37.5547,lng:126.9707}, GMP_APT={en:"Gimpo Airport",lat:37.5583,lng:126.7906};
-const gRouteEmbed=(a,b,air)=>"https://maps.google.com/maps?saddr="+enc(a)+"&daddr="+enc(b)+(air?"":"&dirflg=r")+"&hl="+lang+"&output=embed";
+/* zoom one step wider than "fit both points", so Google's directions panel (top-left) does not cover the route */
+const JEJU_APT={lat:33.5066,lng:126.4929};
+function fitZ(pa,pb,el){const W=(el&&el.clientWidth)||560,H=(el&&el.clientHeight)||420,my=l=>Math.log(Math.tan(Math.PI/4+l*Math.PI/360));
+  const dx=Math.max(Math.abs(pa.lng-pb.lng)/360,1e-6),dy=Math.max(Math.abs(my(pa.lat)-my(pb.lat))/(2*Math.PI),1e-6);
+  return Math.max(3,Math.min(16,Math.floor(Math.min(Math.log2(W/256/dx),Math.log2(H/256/dy)))-1))}
+const gRouteEmbed=(a,b,air,pa,pb,el)=>"https://maps.google.com/maps?saddr="+enc(a)+"&daddr="+enc(b)+(air?"":"&dirflg=r")+(pa&&pb?"&z="+fitZ(pa,pb,el):"")+"&hl="+lang+"&output=embed";
 const gRouteLink=(a,b,air)=>"https://www.google.com/maps/dir/?api=1&origin="+enc(a)+"&destination="+enc(b)+(air?"":"&travelmode=transit")+"&hl="+lang;
 const nRouteLink=(s,d)=>"https://map.naver.com/p/directions/"+s.lng+","+s.lat+","+enc(s.en)+",,/"+d.lng+","+d.lat+","+enc(d.en)+",,/-/transit?lang=en";
 const ll=p=>p.lat+","+p.lng;
@@ -517,7 +525,7 @@ function showMap(p,scroll){mapSel=p;const H={en:hotel.en,lat:hotel.lat,lng:hotel
   const same=p.lat==null||hav(hotel.lat,hotel.lng,p.lat,p.lng)<0.05;
   if(same){$("map").src=p.lat==null?embed(p):embed({...H,z:16});$("mapName").textContent=p.label||p.en;
     $("mapLinks").innerHTML=`<a href="${gPlace(p.lat==null?p:H)}" target="_blank" rel="noopener">${t().gmap}</a>`}
-  else{$("map").src=gRouteEmbed(ll(H),ll(p));$("mapName").textContent=`${hotel.en} → ${p.label||p.en} · ${fmt(km(p))}`;
+  else{$("map").src=gRouteEmbed(ll(H),ll(p),false,H,p,$("map"));$("mapName").textContent=`${hotel.en} → ${p.label||p.en} · ${fmt(km(p))}`;
     $("mapLinks").innerHTML=routeLinks(H,{en:p.label||p.en,lat:p.lat,lng:p.lng})}
   document.querySelectorAll(".card.on").forEach(c=>c.classList.remove("on"));if(p.i!=null){const c=$("p"+p.i);if(c)c.classList.add("on")}
   if(scroll)$("mapbox").scrollIntoView({block:"start"})}
@@ -587,7 +595,7 @@ const bKm=b=>Math.round(hav(SEOUL_STN.lat,SEOUL_STN.lng,b.lat,b.lng));
 function bOverview(){bSel=null;$("bmap").src="https://maps.google.com/maps?ll=35.6,127.6&z=7&hl="+lang+"&output=embed";$("bmapName").textContent=t().kor;$("bmapLinks").innerHTML="";
   document.querySelectorAll(".bc.on").forEach(c=>c.classList.remove("on"))}
 function bShow(b,scroll){bSel=b;const s=bFrom(b),d={en:b[lang].n,lat:b.lat,lng:b.lng};
-  $("bmap").src=b.air?gRouteEmbed("Gimpo International Airport","Jeju International Airport",true):gRouteEmbed(s.en,ll(b));
+  $("bmap").src=b.air?gRouteEmbed("Gimpo International Airport","Jeju International Airport",true,GMP_APT,JEJU_APT,$("bmap")):gRouteEmbed(s.en,ll(b),false,s,b,$("bmap"));
   $("bmapName").textContent=`${s.en} → ${b[lang].n} · ≈ ${Math.round(hav(s.lat,s.lng,b.lat,b.lng))} km`;$("bmapLinks").innerHTML=routeLinks(s,d,b.air);
   document.querySelectorAll(".bc.on").forEach(c=>c.classList.remove("on"));const c=$("b-"+b.id);if(c)c.classList.add("on");if(scroll)$("bmapbox").scrollIntoView({block:"start"})}
 function renderBeyond(){
@@ -616,10 +624,10 @@ const hAir=h=>h.p==="jeju";
 const hLinks=h=>{const d={en:h.en,lat:h.lat,lng:h.lng},o=hAir(h)?GMP_APT:SEOUL_STN;
   return `<a href="${hAir(h)?gRouteLink("Gimpo International Airport","Jeju International Airport",true):gRouteLink(ll(o),ll(d))}" target="_blank" rel="noopener">${t().gRoute}</a><a href="${nRouteLink(o,d)}" target="_blank" rel="noopener">${t().nRoute}</a><a href="${nPlace(h)}" target="_blank" rel="noopener">${t().nPl}</a>`};
 function hShow(h,scroll){hSel=h;const o=hAir(h)?GMP_APT:SEOUL_STN;
-  $("hmap").src=hAir(h)?gRouteEmbed("Gimpo International Airport","Jeju International Airport",true):gRouteEmbed(o.en,ll(h));
+  $("hmap").src=hAir(h)?gRouteEmbed("Gimpo International Airport","Jeju International Airport",true,GMP_APT,JEJU_APT,$("hmap")):gRouteEmbed(o.en,ll(h),false,o,h,$("hmap"));
   $("hmapName").textContent=`${o.en} → ${h.en} · ≈ ${Math.round(hav(SEOUL_STN.lat,SEOUL_STN.lng,h.lat,h.lng))} km`;
   $("hmapLinks").innerHTML=hLinks(h);
-  document.querySelectorAll(".hs li.on").forEach(x=>x.classList.remove("on"));const li=document.querySelector(`.hs li[data-h="${HERITAGE.indexOf(h)}"]`);if(li)li.classList.add("on");
+  document.querySelectorAll(".hs li.on,.hp.on").forEach(x=>x.classList.remove("on"));const li=document.querySelector(`.hs li[data-h="${HERITAGE.indexOf(h)}"]`);if(li){li.classList.add("on");li.closest(".hp").classList.add("on")}
   if(scroll)$("hmapbox").scrollIntoView({block:"start"})}
 function renderHeritage(){
   $("herLead").textContent=t().herLead(HER_PROPS.length,HERITAGE.length);
@@ -628,7 +636,7 @@ function renderHeritage(){
     return `<article class="hp${p.t==="n"?" nat":""}"><div class="r">${p.y} · ${p.t==="n"?t().natural:t().cultural} · ${esc(areas)}</div><h3>${p[lang]}</h3><p class="dsc">${p.d[lang]}</p>
     <div class="cnt">${t().herCnt(list.length)}</div><ul class="hs">${list.map(([h,i])=>`<li data-h="${i}" tabindex="0"><div><span class="nm">${esc(h.en)}</span><span class="ko" lang="ko">${esc(h.ko)}</span><div class="ar">${esc(h.area)}</div><div class="hw">${esc(h.how[lang])}</div></div><div class="km">≈ ${Math.round(hav(SEOUL_STN.lat,SEOUL_STN.lng,h.lat,h.lng))} km</div><div class="lk">${hLinks(h)}</div></li>`).join("")}</ul></article>`}).join("");
   if(hSel)hShow(hSel,false);else{$("hmap").src="https://maps.google.com/maps?ll=35.9,127.6&z=7&hl="+lang+"&output=embed";$("hmapName").textContent=t().herMapHint;$("hmapLinks").innerHTML=""}}
-function pickH(e){const li=e.target.closest("li[data-h]");if(!li||e.target.closest("a"))return;if(e.type==="keydown"){if(e.key!=="Enter"&&e.key!==" ")return;e.preventDefault()}
+function pickH(e){const card=e.target.closest(".hp");if(!card||e.target.closest("a"))return;const li=e.target.closest("li[data-h]")||card.querySelector("li[data-h]");if(!li)return;if(e.type==="keydown"){if(e.key!=="Enter"&&e.key!==" ")return;e.preventDefault()}
   hShow(HERITAGE[+li.dataset.h],matchMedia("(max-width:860px)").matches)}
 $("herList").addEventListener("click",pickH);$("herList").addEventListener("keydown",pickH);
 const secs=["schedule","before","around","good","food","dep","todo","beyond","heritage"];
