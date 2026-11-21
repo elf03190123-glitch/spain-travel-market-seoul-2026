@@ -59,7 +59,13 @@ h1{font-family:var(--display);font-size:calc(clamp(27px,4.4vw,42px)*var(--fs));l
 .note{font-size:calc(13px*var(--fs));color:var(--muted);margin:0}
 
 /* nav */
-nav.tabs{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:1px solid var(--line);margin:-16px 0 -16px;display:flex;overflow-x:auto;scrollbar-width:none;padding-top:env(safe-area-inset-top,0px)}
+.topbar{position:sticky;top:0;z-index:20;background:var(--bg);margin:-16px 0 -16px;padding-top:env(safe-area-inset-top,0px);min-width:0}
+.topbar .ctl{padding:10px 0 8px;border-bottom:1px solid var(--line)}
+#todoCtl[hidden]{display:none}
+.topbar .ctl .seg{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;max-width:100%}
+.topbar .ctl .seg::-webkit-scrollbar{display:none}
+.topbar .ctl .seg button{white-space:nowrap;flex:none}
+nav.tabs{background:var(--bg);border-bottom:1px solid var(--line);display:flex;overflow-x:auto;scrollbar-width:none}
 nav.tabs::-webkit-scrollbar{display:none}
 nav.tabs a{white-space:nowrap;text-decoration:none;color:var(--muted);font-weight:600;font-size:calc(14px*var(--fs));padding:12px 12px 10px;border-bottom:3px solid transparent}
 nav.tabs a:hover{color:var(--ink)}
@@ -109,7 +115,7 @@ h2{font-family:var(--display);font-size:calc(clamp(23px,3vw,28px)*var(--fs));mar
 .seg button{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:5px 13px;font-size:calc(13.5px*var(--fs));cursor:pointer}
 .seg button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
 .split{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:20px;align-items:start}
-.mapbox{position:sticky;top:60px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.mapbox{position:sticky;top:calc(var(--tb,52px) + 8px);display:flex;flex-direction:column;gap:8px;min-width:0}
 .mapbox iframe{width:100%;height:min(70vh,600px);min-height:340px;border:1px solid var(--line);border-radius:12px;background:var(--chip);display:block}
 .maphead{display:flex;justify-content:space-between;gap:8px;align-items:baseline;flex-wrap:wrap}
 .maphead b{font-size:calc(14.5px*var(--fs));overflow:hidden;text-overflow:ellipsis}
@@ -197,6 +203,11 @@ footer p{margin:0}
     </div>
   </header>
 
+  <div class="topbar" id="topbar">
+  <div class="ctl" id="todoCtl" hidden>
+    <div class="seg" id="viewSeg" role="group"></div>
+    <div class="seg" id="catSeg" role="group"></div>
+  </div>
   <nav class="tabs" id="tabs">
     <a href="#schedule" data-t="nSched"></a>
     <a href="#before" data-t="nBefore"></a>
@@ -207,6 +218,7 @@ footer p{margin:0}
     <a href="#todo" data-t="nTodo"></a>
     <a href="#beyond" data-t="nBeyond"></a>
   </nav>
+  </div>
 
   <section id="schedule">
     <h2 data-t="nSched"></h2>
@@ -253,10 +265,6 @@ footer p{margin:0}
   <section id="todo">
     <h2 data-t="nTodo"></h2>
     <p class="lead" id="todoLead"></p>
-    <div class="ctl">
-      <div class="seg" id="viewSeg" role="group"></div>
-      <div class="seg" id="catSeg" role="group"></div>
-    </div>
     <div class="split">
       <div id="list"></div>
       <div class="mapbox" id="mapbox">
@@ -548,9 +556,17 @@ function renderFood(){
 $("foodSeg").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;fg=b.dataset.fg;renderFood()});
 $("intlSeg").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;ic=b.dataset.ic;renderFood()});
 const secs=["schedule","before","around","good","food","dep","todo","beyond"];
-addEventListener("scroll",()=>{let cur=secs[0];for(const s of secs){if($(s).getBoundingClientRect().top<120)cur=s}
+/* sticky top bar: the nearby sort/category rows sit above the menu tabs while "Things to do nearby" is on screen */
+function syncTopbar(){const r=$("todo").getBoundingClientRect(),c=$("todoCtl"),tb=$("topbar");
+  const show=r.top<innerHeight*0.5&&r.bottom>tb.offsetHeight+160;if(c.hidden===show)c.hidden=!show;
+  const h=tb.offsetHeight;document.documentElement.style.setProperty("--tb",h+"px");document.documentElement.style.scrollPaddingTop=(h+12)+"px"}
+addEventListener("scroll",()=>{syncTopbar();let cur=secs[0];for(const s of secs){if($(s).getBoundingClientRect().top<120)cur=s}
   document.querySelectorAll("#tabs a").forEach(a=>a.classList.toggle("on",a.getAttribute("href")==="#"+cur))},{passive:true});
-renderAll();
+addEventListener("resize",syncTopbar);
+/* after changing a nearby filter, jump back to the top of the list */
+["catSeg","viewSeg"].forEach(id=>$(id).addEventListener("click",e=>{if(!e.target.closest("button"))return;
+  requestAnimationFrame(()=>{const y=$("todo").getBoundingClientRect().top+scrollY-$("topbar").offsetHeight-8;if(scrollY>y)scrollTo({top:y})})}));
+renderAll();syncTopbar();
 </script>
 </body>
 </html>
