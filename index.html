@@ -114,6 +114,16 @@ h2{font-family:var(--display);font-size:calc(clamp(23px,3vw,28px)*var(--fs));mar
 .maphead b{font-size:calc(14.5px*var(--fs));overflow:hidden;text-overflow:ellipsis}
 .maphead a{font-size:calc(13.5px*var(--fs));font-weight:600;text-decoration:none;white-space:nowrap}
 @media (max-width:860px){.split{grid-template-columns:minmax(0,1fr)}.mapbox{position:static;order:-1}.mapbox iframe{height:52vh;min-height:300px}}
+/* beyond seoul */
+.bgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,280px),1fr));gap:16px}
+.bc{background:var(--surface);border:1px solid var(--line);border-top:4px solid var(--gold);border-radius:10px;padding:14px 16px;display:flex;flex-direction:column;gap:6px;scroll-margin-top:70px}
+.bc.on{outline:2px solid var(--accent)}
+.bc .r{font-size:calc(11.5px*var(--fs));font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--gold)}
+.bc h3{margin:0;font-size:calc(17px*var(--fs))}
+.bc .how{font-size:calc(13.5px*var(--fs));font-weight:600}
+.bc p{margin:0;font-size:calc(14px*var(--fs));color:var(--muted)}
+.bc .tip{font-size:calc(13px*var(--fs));color:var(--ink);background:var(--soft);border-radius:6px;padding:6px 9px}
+.bc .lk{margin-top:auto;padding-top:6px;font-size:calc(13px*var(--fs))}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,230px),1fr));gap:16px}
 .card{background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden;display:flex;flex-direction:column;min-width:0;scroll-margin-top:70px}
 .card.on{outline:2px solid var(--accent)}
@@ -169,6 +179,7 @@ footer p{margin:0}
     <a href="#good" data-t="nGood"></a>
     <a href="#dep" data-t="nDep"></a>
     <a href="#todo" data-t="nTodo"></a>
+    <a href="#beyond" data-t="nBeyond"></a>
   </nav>
 
   <section id="schedule">
@@ -214,6 +225,19 @@ footer p{margin:0}
     </div>
   </section>
 
+  <section id="beyond">
+    <h2 data-t="nBeyond"></h2>
+    <p class="lead" data-t="beyondLead"></p>
+    <div class="split">
+      <div class="bgrid" id="beyondList"></div>
+      <div class="mapbox" id="bmapbox">
+        <div class="maphead"><b id="bmapName"></b><a id="bmapOpen" target="_blank" rel="noopener"></a></div>
+        <iframe id="bmap" title="Google Maps" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+      </div>
+    </div>
+    <p class="note" data-t="beyondNote"></p>
+  </section>
+
   <footer>
     <p data-t="src1"></p>
     <p data-t="src2"></p>
@@ -233,13 +257,15 @@ const VENUES = {
   dure: {en:"Dure (MMCA Seoul)", ko:"두레 국립현대미술관 서울관", addr:"30 Samcheong-ro, Jongno-gu, Seoul", lat:37.578865, lng:126.980680}
 };
 const CATS = ["12","14","39","38","28","T"];
+/* ── Beyond Seoul: recommended destinations (EN/ES) ── */
+const BEYOND = [{"id": "dmz","lat": 37.8895,"lng": 126.74,"z": 11,"q": "Imjingak, Paju","en": {"n": "DMZ (Demilitarized Zone)","r": "Gyeonggi-do · day trip","how": "About 1 h by tour bus from Seoul","p": "The border between North and South Korea: Imjingak, the Third Infiltration Tunnel and Dora Observatory. A unique look at modern Korean history.","tip": "Guided tours only — book ahead and bring your passport. Access and programmes can change."},"es": {"n": "DMZ (Zona Desmilitarizada)","r": "Gyeonggi-do · excursión de un día","how": "Aprox. 1 h en autobús de tour desde Seúl","p": "La frontera entre las dos Coreas: Imjingak, el Tercer Túnel de Infiltración y el Observatorio Dora. Una mirada única a la historia reciente de Corea.","tip": "Solo con visita guiada: reserve con antelación y lleve el pasaporte. Los accesos y programas pueden cambiar."}},{"id": "suwon","lat": 37.2819,"lng": 127.0137,"z": 14,"q": "Hwaseong Fortress, Suwon","en": {"n": "Suwon Hwaseong Fortress","r": "Suwon · day trip · UNESCO","how": "About 30 min by train (ITX/KTX) or 1 h by subway Line 1 to Suwon Station","p": "An 18th-century walled city — walk the 5.7 km of ramparts, gates and watchtowers, then visit Hwaseong Haenggung palace.","tip": "Combine with Suwon's famous grilled ribs (galbi)."},"es": {"n": "Fortaleza Hwaseong de Suwon","r": "Suwon · excursión de un día · UNESCO","how": "Aprox. 30 min en tren (ITX/KTX) o 1 h en la línea 1 de metro hasta Suwon Station","p": "Una ciudad amurallada del siglo XVIII: recorra los 5,7 km de murallas, puertas y torres de vigilancia, y visite el palacio Hwaseong Haenggung.","tip": "Aprovéchelo para probar las famosas costillas a la brasa (galbi) de Suwon."}},{"id": "nami","lat": 37.7905,"lng": 127.5255,"z": 13,"q": "Nami Island","en": {"n": "Nami Island & Gapyeong","r": "Gangwon/Gyeonggi · day trip","how": "About 1 h by ITX-Cheongchun train to Gapyeong, then taxi and a short ferry","p": "A river island of tree-lined avenues, famous from Korean dramas. Easy to combine with the Garden of Morning Calm.","tip": "Late November is the end of the autumn colours — dress warmly."},"es": {"n": "Isla Nami y Gapyeong","r": "Gangwon/Gyeonggi · excursión de un día","how": "Aprox. 1 h en tren ITX-Cheongchun hasta Gapyeong, luego taxi y un ferri corto","p": "Una isla fluvial con avenidas de árboles, famosa por los dramas coreanos. Se combina fácilmente con el Jardín de la Calma Matinal.","tip": "A finales de noviembre terminan los colores de otoño: abríguese bien."}},{"id": "busan","lat": 35.0975,"lng": 129.0106,"z": 12,"q": "Gamcheon Culture Village, Busan","en": {"n": "Busan","r": "Korea's second city · 1–2 days","how": "About 2 h 30 min by KTX from Seoul Station","p": "Beaches (Haeundae, Gwangalli), the colourful hillside Gamcheon Culture Village, Jagalchi fish market and the seaside Haedong Yonggungsa temple.","tip": "The most recommended city after Seoul in Spanish travel guides."},"es": {"n": "Busan","r": "Segunda ciudad de Corea · 1–2 días","how": "Aprox. 2 h 30 min en KTX desde Seoul Station","p": "Playas (Haeundae, Gwangalli), el colorido barrio de Gamcheon en la ladera, el mercado de pescado Jagalchi y el templo junto al mar Haedong Yonggungsa.","tip": "La ciudad más recomendada después de Seúl en las guías de viaje españolas."}},{"id": "gyeongju","lat": 35.79,"lng": 129.332,"z": 12,"q": "Bulguksa, Gyeongju","en": {"n": "Gyeongju","r": "Ancient Silla capital · 1–2 days · UNESCO","how": "About 2 h by KTX to Singyeongju Station","p": "An open-air museum: Bulguksa Temple and Seokguram Grotto, the royal tumuli of Daereungwon and Donggung Palace & Wolji Pond, beautiful when lit at night.","tip": "Easy to pair with Busan (about 30 min apart by KTX)."},"es": {"n": "Gyeongju","r": "Antigua capital de Silla · 1–2 días · UNESCO","how": "Aprox. 2 h en KTX hasta la estación de Singyeongju","p": "Un museo al aire libre: el templo Bulguksa y la gruta de Seokguram, los túmulos reales de Daereungwon y el palacio Donggung con el estanque Wolji, precioso iluminado de noche.","tip": "Fácil de combinar con Busan (unos 30 min en KTX)."}},{"id": "jeonju","lat": 35.815,"lng": 127.153,"z": 14,"q": "Jeonju Hanok Village","en": {"n": "Jeonju Hanok Village","r": "Jeollabuk-do · day trip or overnight","how": "About 1 h 40 min by KTX from Yongsan Station","p": "Over 700 traditional hanok houses, the birthplace of bibimbap and a capital of Korean food — perfect for food lovers.","tip": "Stay a night in a hanok guesthouse."},"es": {"n": "Aldea Hanok de Jeonju","r": "Jeollabuk-do · un día o una noche","how": "Aprox. 1 h 40 min en KTX desde la estación de Yongsan","p": "Más de 700 casas tradicionales hanok, la cuna del bibimbap y una capital de la gastronomía coreana: ideal para amantes de la comida.","tip": "Duerma una noche en una casa hanok."}},{"id": "andong","lat": 36.539,"lng": 128.518,"z": 13,"q": "Hahoe Folk Village, Andong","en": {"n": "Andong Hahoe Folk Village","r": "Gyeongsangbuk-do · day trip or overnight · UNESCO","how": "About 2 h by KTX-Eum from Cheongnyangni Station","p": "A living Joseon-era clan village on a river bend, home of the Hahoe mask dance and the Confucian academies of Andong.","tip": "For travellers who want the quieter, traditional side of Korea."},"es": {"n": "Aldea Folclórica Hahoe de Andong","r": "Gyeongsangbuk-do · un día o una noche · UNESCO","how": "Aprox. 2 h en KTX-Eum desde la estación de Cheongnyangni","p": "Una aldea viva de la era Joseon en un meandro del río, cuna de la danza de máscaras Hahoe y de las academias confucianas de Andong.","tip": "Para quien busca el lado más tranquilo y tradicional de Corea."}},{"id": "jeju","lat": 33.458,"lng": 126.942,"z": 10,"q": "Seongsan Ilchulbong","en": {"n": "Jeju Island","r": "Volcanic island · 2–3 days · UNESCO","how": "About 1 h 10 min by plane from Gimpo Airport","p": "Volcanic landscapes: Hallasan, the Seongsan Ilchulbong crater, lava tubes, the coastal Olle walking trails and the haenyeo women divers.","tip": "Rent a car or join a tour — public transport is slow outside Jeju City."},"es": {"n": "Isla de Jeju","r": "Isla volcánica · 2–3 días · UNESCO","how": "Aprox. 1 h 10 min en avión desde el aeropuerto de Gimpo","p": "Paisajes volcánicos: el Hallasan, el cráter Seongsan Ilchulbong, tubos de lava, los senderos costeros Olle y las haenyeo, mujeres buceadoras.","tip": "Alquile un coche o haga un tour: el transporte público es lento fuera de Jeju City."}},{"id": "seorak","lat": 38.119,"lng": 128.4655,"z": 11,"q": "Seoraksan National Park","en": {"n": "Seoraksan & Gangneung","r": "Gangwon-do · 1–2 days","how": "About 2 h by KTX to Gangneung; Seoraksan is about 1 h further by bus","p": "Granite peaks and the cable car of Seoraksan National Park, plus the coffee street and beaches of Gangneung on the East Sea.","tip": "Mountain weather in late November can be below freezing."},"es": {"n": "Seoraksan y Gangneung","r": "Gangwon-do · 1–2 días","how": "Aprox. 2 h en KTX hasta Gangneung; Seoraksan está a 1 h más en autobús","p": "Picos de granito y el teleférico del Parque Nacional Seoraksan, además de la calle del café y las playas de Gangneung en el mar del Este.","tip": "En la montaña puede helar a finales de noviembre."}},{"id": "temple","lat": 37.574,"lng": 126.9817,"z": 15,"q": "Jogyesa Temple, Seoul","url": "https://eng.templestay.com/","en": {"n": "Templestay","r": "Across Korea · 1 night (or a few hours)","how": "Programmes at temples in Seoul and around the country","p": "Stay at a Buddhist temple: dawn ceremony, meditation, temple food and tea with monks. Short day programmes are available in central Seoul too.","tip": "Book on the official Templestay site."},"es": {"n": "Templestay","r": "Toda Corea · 1 noche (o unas horas)","how": "Programas en templos de Seúl y de todo el país","p": "Alójese en un templo budista: ceremonia del amanecer, meditación, comida de templo y té con los monjes. También hay programas cortos en el centro de Seúl.","tip": "Reserve en la web oficial de Templestay."}}];
 
 const T = {
 en:{
   greet:"Welcome to Seoul!", sub:"Participant guide · 25–27 November 2026",
   hotelK:"Your hotel", pick:"Choose your hotel",
   hotelNote:"Participants stay at different hotels. Hotel details for each participant will be added to this guide soon.",
-  nSched:"Schedule", nBefore:"Before you fly", nAround:"Getting around", nGood:"Good to know", nDep:"Departure", nTodo:"Things to do nearby",
+  nSched:"Schedule", nBefore:"Before you fly", nAround:"Getting around", nGood:"Good to know", nDep:"Departure", nTodo:"Things to do nearby", nBeyond:"Beyond Seoul", beyondLead:"Have extra days in Korea? These are the destinations Spanish travel guides recommend most often — history, UNESCO sites, food and nature, all reachable from Seoul by train or a short flight.", beyondNote:"Selection based on the destinations most frequently recommended in Spanish-language travel guides to Korea. Travel times are approximate; check timetables (Korail: letskorail.com) before you go.",
   gmap:"Google Maps ↗", dir:"Directions ↗", nmap:"NAVER Map ↗", onMap:"Show on map", info:"Details ↗",
   schedNote:"Times follow the current plan and may change. Any update will be shared by the organiser.",
   days:[
@@ -293,7 +319,7 @@ es:{
   greet:"¡Bienvenidos a Seúl!", sub:"Guía para participantes · 25–27 de noviembre de 2026",
   hotelK:"Su hotel", pick:"Elija su hotel",
   hotelNote:"Los participantes se alojan en hoteles distintos. Pronto añadiremos a esta guía los datos del hotel de cada participante.",
-  nSched:"Programa", nBefore:"Antes de viajar", nAround:"Cómo moverse", nGood:"Información útil", nDep:"Salida", nTodo:"Qué hacer cerca",
+  nSched:"Programa", nBefore:"Antes de viajar", nAround:"Cómo moverse", nGood:"Información útil", nDep:"Salida", nTodo:"Qué hacer cerca", nBeyond:"Más allá de Seúl", beyondLead:"¿Le quedan días en Corea? Estos son los destinos que más recomiendan las guías de viaje en español: historia, patrimonio de la UNESCO, gastronomía y naturaleza, todos accesibles desde Seúl en tren o con un vuelo corto.", beyondNote:"Selección basada en los destinos más recomendados en las guías de viaje sobre Corea en español. Los tiempos de viaje son aproximados; consulte los horarios (Korail: letskorail.com) antes de salir.",
   gmap:"Google Maps ↗", dir:"Cómo llegar ↗", nmap:"NAVER Map ↗", onMap:"Ver en el mapa", info:"Más información ↗",
   schedNote:"Los horarios corresponden al plan actual y pueden cambiar. El organizador comunicará cualquier novedad.",
   days:[
@@ -422,13 +448,22 @@ function renderAll(){
   document.querySelectorAll("#fsz button").forEach(b=>b.setAttribute("aria-pressed",+b.dataset.fs===FS));
   renderHotel();renderSchedule();
   $("beforeCards").innerHTML=cards(t().before);$("aroundCards").innerHTML=cards(t().around);$("goodCards").innerHTML=cards(t().good);$("depCards").innerHTML=cards(t().dep);
-  renderPlaces();
+  renderPlaces();renderBeyond();
   showMap(mapSel&&mapSel.i!=null?{...mapSel,label:mapSel.en}:(mapSel||hotelPlace()),false);
 }
 $("langs").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;lang=b.dataset.lang;store.set("stmLang",lang);renderAll()});
 $("fsz").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;FS=+b.dataset.fs;store.set("stmFs",FS);document.documentElement.style.setProperty("--fs",FS);renderAll()});
 document.documentElement.style.setProperty("--fs",FS);
-const secs=["schedule","before","around","good","dep","todo"];
+/* ── beyond Seoul ── */
+let bSel=null;
+function bShow(b,scroll){bSel=b;const p={lat:b.lat,lng:b.lng,z:b.z};$("bmap").src=embed(p);$("bmapName").textContent=b[lang].n;$("bmapOpen").href="https://www.google.com/maps/search/?api=1&query="+enc(b.q)+"&hl="+lang;$("bmapOpen").textContent=t().gmap;
+  document.querySelectorAll(".bc.on").forEach(c=>c.classList.remove("on"));const c=$("b-"+b.id);if(c)c.classList.add("on");if(scroll)$("bmapbox").scrollIntoView({block:"start"})}
+function renderBeyond(){
+  $("beyondList").innerHTML=BEYOND.map(b=>{const x=b[lang];return `<article class="bc" id="b-${b.id}"><div class="r">${x.r}</div><h3>${x.n}</h3><div class="how">${x.how}</div><p>${x.p}</p><div class="tip">${x.tip}</div>
+    <div class="lk"><button type="button" data-b="${b.id}">${t().onMap}</button><a href="https://www.google.com/maps/search/?api=1&query=${enc(b.q)}&hl=${lang}" target="_blank" rel="noopener">${t().gmap}</a>${b.url?`<a href="${b.url}" target="_blank" rel="noopener">${t().info}</a>`:""}</div></article>`}).join("");
+  bShow(bSel||BEYOND[0],false)}
+$("beyondList").addEventListener("click",e=>{const b=e.target.closest("button[data-b]");if(!b)return;bShow(BEYOND.find(x=>x.id===b.dataset.b),matchMedia("(max-width:860px)").matches)});
+const secs=["schedule","before","around","good","dep","todo","beyond"];
 addEventListener("scroll",()=>{let cur=secs[0];for(const s of secs){if($(s).getBoundingClientRect().top<120)cur=s}
   document.querySelectorAll("#tabs a").forEach(a=>a.classList.toggle("on",a.getAttribute("href")==="#"+cur))},{passive:true});
 renderAll();
