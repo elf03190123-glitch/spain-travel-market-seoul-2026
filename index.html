@@ -17,6 +17,7 @@
   --fs:1;
   --bg:#f7f4ef; --surface:#ffffff; --ink:#1f1b18; --muted:#62584f; --line:#e3dbd0; --chip:#efe8de;
   --accent:#a8231c; --accent-ink:#ffffff; --gold:#b07a00; --soft:#fbefe6;
+  --ln1:#0052a4; --ln2:#00a84d; --ln3:#ef7c1c; --ln4:#00a5de; --ln5:#996cac; --ln6:#cd7c2f;
   --c12:#a8231c; --c14:#2f5ea8; --c39:#b8560f; --c38:#8a3b78; --c28:#2f7d3e; --cT:#7a5a2b;
   --display:"Fraunces","Noto Sans KR",Georgia,serif;
   --body:"Inter","Noto Sans KR",system-ui,-apple-system,"Segoe UI",sans-serif;
@@ -51,11 +52,43 @@ header{display:flex;flex-direction:column;gap:18px}
 .eyebrow{font-family:var(--display);color:var(--accent);font-size:calc(clamp(17px,2.2vw,21px)*var(--fs));font-weight:500}
 h1{font-family:var(--display);font-size:calc(clamp(27px,4.4vw,42px)*var(--fs));line-height:1.15;margin:2px 0 4px;font-weight:700}
 .sub{color:var(--muted);font-weight:500}
-.hotelbox{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:10px;padding:14px 16px;display:flex;flex-direction:column;gap:6px;max-width:780px}
+.hotelbox{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:10px;padding:16px 18px;display:flex;flex-direction:column;gap:12px}
 .hotelbox .k{font-size:calc(11.5px*var(--fs));font-weight:700;letter-spacing:.08em;color:var(--gold);text-transform:uppercase}
-.hotelbox b{font-size:calc(16.5px*var(--fs))}
-.hotelbox .row{display:flex;gap:8px 14px;flex-wrap:wrap;align-items:center}
-.hotelbox select{font:inherit;font-weight:700;font-size:calc(16.5px*var(--fs));cursor:pointer;padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);max-width:100%}
+.hx-head{display:flex;flex-direction:column;gap:2px;max-width:760px}
+.hx-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:14px;align-items:start}
+@media (min-width:880px){.hx-grid{grid-template-columns:minmax(0,1fr) minmax(0,1.1fr)}}
+.hx-list{display:flex;flex-direction:column;gap:6px;min-width:0}
+.hx-list .zn{font-size:calc(11.5px*var(--fs));font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:6px 2px 0}
+.hx-list .zn:first-child{padding-top:0}
+.ho{position:relative;display:grid;grid-template-columns:18px minmax(0,1fr);gap:1px 10px;padding:9px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);cursor:pointer;transition:border-color .15s,background-color .15s}
+.ho:hover{border-color:var(--accent)}
+.ho input{position:absolute;opacity:0;width:1px;height:1px;margin:0;pointer-events:none}
+.ho .dot{grid-row:1 / span 2;width:18px;height:18px;margin-top:2px;border-radius:50%;border:2px solid var(--muted);box-sizing:border-box;display:flex;align-items:center;justify-content:center}
+.ho .nm{font-weight:700;font-size:calc(15px*var(--fs));line-height:1.35;color:var(--ink)}
+.ho .mt{font-size:calc(12.5px*var(--fs));line-height:1.45;color:var(--muted)}
+.ho.on{border-color:var(--accent);background:var(--soft);box-shadow:inset 0 0 0 1px var(--accent)}
+.ho.on .dot{border-color:var(--accent)}
+.ho.on .dot::after{content:"";width:8px;height:8px;border-radius:50%;background:var(--accent)}
+.ho.on .nm{color:var(--accent)}
+.ho:focus-within{outline:2px solid var(--accent);outline-offset:2px}
+.ho:has(input:not(:focus-visible)){outline:none}
+.hx-sum{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:14px 16px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.hx-top{display:flex;flex-direction:column;gap:4px;align-items:flex-start}
+.hx-nm{font-family:var(--display);font-size:calc(19px*var(--fs));font-weight:600;line-height:1.3;margin:0;text-wrap:balance}
+.hx-ad{font-size:calc(14px*var(--fs))}
+.hx-rows{margin:0;display:flex;flex-direction:column;gap:10px}
+.hx-rows>div{display:grid;grid-template-columns:minmax(0,1fr);gap:3px;padding-top:10px;border-top:1px solid var(--line)}
+@media (min-width:560px){.hx-rows>div{grid-template-columns:128px minmax(0,1fr);gap:12px}}
+.hx-rows dt{font-size:calc(11.5px*var(--fs));font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding-top:2px}
+.hx-rows dd{margin:0;min-width:0}
+.hx-rows ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:5px;font-size:calc(14px*var(--fs))}
+.hx-rows .hx-mut{color:var(--muted);font:inherit;font-size:calc(13.5px*var(--fs))}
+.ln{display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;padding:0 4px;box-sizing:border-box;border-radius:9px;font-size:calc(11px*var(--fs));font-weight:700;line-height:1;color:#fff;background:var(--muted);vertical-align:1px;margin-right:2px;font-variant-numeric:tabular-nums}
+.ln.l1{background:var(--ln1)}.ln.l2{background:var(--ln2)}.ln.l3{background:var(--ln3)}.ln.l4{background:var(--ln4)}.ln.l5{background:var(--ln5)}.ln.l6{background:var(--ln6)}
+.flash{animation:hxFlash 1.4s ease-out}
+@keyframes hxFlash{0%{box-shadow:0 0 0 3px var(--accent)}100%{box-shadow:0 0 0 0 transparent}}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:60;background:var(--ink);color:var(--bg);padding:9px 18px;border-radius:999px;font-weight:600;font-size:calc(14px*var(--fs));box-shadow:0 6px 22px rgba(0,0,0,.28);max-width:calc(100% - 32px);box-sizing:border-box;text-align:center}
+@media (prefers-reduced-motion:reduce){.flash{animation:none}.ho{transition:none}}
 .note{font-size:calc(13px*var(--fs));color:var(--muted);margin:0}
 
 /* nav */
@@ -235,13 +268,14 @@ footer p{margin:0}
         <div class="sub" data-t="sub"></div>
       </div>
     </div>
-    <div class="hotelbox">
-      <div class="k" data-t="hotelK"></div>
-      <div class="row"><b id="hName"></b><select id="hotelSel" hidden aria-label="Hotel"></select></div>
-      <div id="hAddr"></div>
-      <div class="lk" id="hLinks"></div>
-      <p class="note" data-t="hotelNote"></p>
+    <div class="hotelbox" id="hotelbox">
+      <div class="hx-head"><div class="k" id="hxK" data-t="pickK"></div><p class="note" id="hxNote" data-t="hotelNote"></p></div>
+      <div class="hx-grid">
+        <div class="hx-list" id="hList" role="radiogroup" aria-labelledby="hxK"></div>
+        <div class="hx-sum" id="hSum" aria-live="polite"></div>
+      </div>
     </div>
+    <div class="toast" id="toast" role="status" hidden></div>
   </header>
 
   <div class="topbar" id="topbar">
@@ -287,13 +321,13 @@ footer p{margin:0}
     <h2 data-t="nFood"></h2>
     <p class="lead" data-t="foodLead"></p>
     <div class="info" id="foodTips"></div>
-    <h3 class="sub2" data-t="spotsH"></h3>
+    <h3 class="hx-mut" data-t="spotsH"></h3>
     <div class="info" id="foodSpots"></div>
-    <h3 class="sub2" data-t="dishesH"></h3>
+    <h3 class="hx-mut" data-t="dishesH"></h3>
     <div class="seg" id="foodSeg" role="group"></div>
     <div class="fgrid" id="foodList"></div>
     <p class="note" data-t="foodPhNote"></p>
-    <h3 class="sub2" data-t="intlH"></h3>
+    <h3 class="hx-mut" data-t="intlH"></h3>
     <p class="lead" data-t="intlLead"></p>
     <div class="seg" id="intlSeg" role="group"></div>
     <div class="rgrid" id="intlList"></div>
@@ -386,8 +420,8 @@ en:{
        md:["<b>Gimpo (GMP):</b> AREX train to Seoul Station, then Line 4 to Myeongdong Station (about 45 min).","<b>Incheon (ICN):</b> AREX train to Seoul Station, then Line 4 to Myeongdong Station (about 1 h 15 min in total), an airport limousine bus to Myeongdong, or a taxi (about 1 h or more, depending on traffic)."]},
   stP:(h,st)=>`${h} is close to ${st}.`, stName:(n,l,m)=>`<b>${n} Station</b> (${l.length>1?"Lines "+l.slice(0,-1).join(", ")+" & "+l[l.length-1]:"Line "+l[0]}, ~${m} min walk)`, atHotel:"At your hotel",
   greet:"Welcome to Seoul!", sub:"Participant guide · 25–27 November 2026",
-  hotelK:"Your hotel", pick:"Choose your hotel",
-  hotelNote:"Choose your hotel — distances, maps, nearby stations, airport directions and food spots on this page follow your choice (remembered on this device).",
+  hotelK:"Your hotel", pick:"Choose your hotel", pickK:"Your hotel · tap to choose", zoneN:{ddp:"Dongdaemun area",md:"Myeongdong area"}, selected:"Selected", sumSt:"Nearest subway", sumApt:"From the airport", sumVen:"Event venues", venL:{jw:"B2B meetings & cocktails · JW Marriott Dongdaemun Square",dure:"Welcome dinner · Dure (MMCA Seoul)"}, b2bShort:"B2B venue", sameBldg:"same building", updated:h=>`Page updated for ${h}`, stL:x=>`${x.en} Station`,
+  hotelNote:"Pick the hotel you are staying at. The summary, schedule distances, Getting around, food spots and maps on this page then follow that hotel. Your choice is remembered on this device.",
   nSched:"Schedule", nBefore:"Before you fly", nAround:"Getting around", nGood:"Good to know", nDep:"Departure", nTodo:"Things to do nearby", nHer:"World Heritage", herLead:(p,n)=>`Korea\u2019s ${p} UNESCO World Heritage properties — ${n} locations you can visit, with the distance from Seoul. Tap a location to see the route from Seoul on the map.`, herNote:"Travel times are approximate (from Seoul Station; Jeju from Gimpo Airport). Times on the Google map are live estimates and can include long waits outside daytime hours — check NAVER Map (English) for timetables. Locations compiled by AVIAREPS Korea on NAVER Map. Some properties have more components than listed here (e.g. 40 Joseon royal tombs, 9 seowon academies).", herMapHint:"South Korea — tap a location to see the route from Seoul", herCnt:n=>n===1?"1 place to visit":`${n} places to visit`, natural:"Natural", cultural:"Cultural", hRoute:"Route from Seoul (NAVER Map) ↗", nPl:"NAVER Map place ↗", hvYear:"By year listed", hvRegion:"By region", nFood:"Korean food", foodLead:"28 dishes to try while you are in Korea, with their names in Korean so you can point at them, plus food spots next to your hotel and international restaurants in Seoul.", spotsH:"Food spots near your hotel", dishesH:"28 Korean dishes to try", intlH:"Craving something else? International restaurants in Seoul", intlLead:"A short list of well-regarded restaurants for Chinese, Japanese, Thai, Vietnamese, Italian, Indian and Spanish food. Book ahead for the higher-end places.", intlNote:"Restaurant information was checked in November 2026 (MICHELIN Guide Seoul and other public sources). Opening hours and reservations change — please check before you go.", photo:"Photo", foodPhNote:"Dish photos: Wikimedia Commons, under the free licences shown on each photo (tap the credit for the original). Dishes look different from restaurant to restaurant.", spicy:"Spicy", veg:"Vegetarian", vegOpt:"Vegetarian option", nBeyond:"Beyond Seoul", beyondLead:"Have extra days in Korea? These are the destinations Spanish travel guides recommend most often — history, UNESCO sites, food and nature, all reachable from Seoul by train or a short flight. Tap a destination to see the distance and the KTX, bus or flight route from Seoul.", bmapNote:"Times on the Google map are Google’s public-transport estimates. NAVER Map (English) also shows KTX trains, express buses and flights; KTX tickets: letskorail.com.", beyondNote:"Selection based on the destinations most frequently recommended in Spanish-language travel guides to Korea. Travel times are approximate; check timetables (Korail: letskorail.com) before you go.",
   gmap:"Google Maps ↗", dir:"Directions ↗", nmap:"NAVER Map ↗", onMap:"Show on map", info:"Details ↗", gRoute:"Google Maps route ↗", nRoute:"NAVER Map (English) ↗", fromSeoul:k=>`≈ ${k} km from Seoul (straight line)`, kor:"South Korea — tap a destination to see the route from Seoul",
   schedNote:"Times follow the current plan and may change. Any update will be shared by the organiser.",
@@ -443,8 +477,8 @@ es:{
        md:["<b>Gimpo (GMP):</b> tren AREX hasta Seoul Station y después línea 4 hasta la estación Myeongdong (unos 45 min).","<b>Incheon (ICN):</b> tren AREX hasta Seoul Station y después línea 4 hasta la estación Myeongdong (en total, aprox. 1 h 15 min), autobús limusina del aeropuerto a Myeongdong, o taxi (aprox. 1 h o más, según el tráfico)."]},
   stP:(h,st)=>`${h} está cerca de ${st}.`, stName:(n,l,m)=>`<b>estación ${n}</b> (${l.length>1?"líneas "+l.slice(0,-1).join(", ")+" y "+l[l.length-1]:"línea "+l[0]}, ~${m} min a pie)`, atHotel:"En su hotel",
   greet:"¡Bienvenidos a Seúl!", sub:"Guía para participantes · 25–27 de noviembre de 2026",
-  hotelK:"Su hotel", pick:"Elija su hotel",
-  hotelNote:"Elija su hotel: las distancias, los mapas, las estaciones cercanas, cómo llegar desde el aeropuerto y los lugares para comer de esta página se adaptan a su elección (se recuerda en este dispositivo).",
+  hotelK:"Su hotel", pick:"Elija su hotel", pickK:"Su hotel · toque para elegir", zoneN:{ddp:"Zona de Dongdaemun",md:"Zona de Myeongdong"}, selected:"Seleccionado", sumSt:"Metro más cercano", sumApt:"Desde el aeropuerto", sumVen:"Lugares del evento", venL:{jw:"Reuniones B2B y cóctel · JW Marriott Dongdaemun Square",dure:"Cena de bienvenida · Dure (MMCA Seúl)"}, b2bShort:"Sede B2B", sameBldg:"mismo edificio", updated:h=>`Página actualizada para ${h}`, stL:x=>`Estación ${x.en}`,
+  hotelNote:"Elija el hotel donde se aloja. El resumen, las distancias del programa, cómo moverse, los lugares para comer y los mapas de esta página se adaptan a ese hotel. Su elección se recuerda en este dispositivo.",
   nSched:"Programa", nBefore:"Antes de viajar", nAround:"Cómo moverse", nGood:"Información útil", nDep:"Salida", nTodo:"Qué hacer cerca", nHer:"Patrimonio Mundial", herLead:(p,n)=>`Los ${p} bienes de Corea inscritos en el Patrimonio Mundial de la UNESCO: ${n} lugares que se pueden visitar, con la distancia desde Seúl. Pulse un lugar para ver en el mapa la ruta desde Seúl.`, herNote:"Los tiempos de viaje son aproximados (desde Seoul Station; Jeju desde el aeropuerto de Gimpo). Los tiempos del mapa de Google son estimaciones en directo y pueden incluir largas esperas fuera del horario diurno: consulte los horarios en NAVER Map (en inglés). Ubicaciones recopiladas por AVIAREPS Korea en NAVER Map. Algunos bienes tienen más componentes que los indicados (p. ej., 40 tumbas reales Joseon y 9 academias seowon).", herMapHint:"Corea del Sur — pulse un lugar para ver la ruta desde Seúl", herCnt:n=>n===1?"1 lugar para visitar":`${n} lugares para visitar`, natural:"Natural", cultural:"Cultural", hRoute:"Ruta desde Seúl (NAVER Map) ↗", nPl:"Lugar en NAVER Map ↗", hvYear:"Por año de inscripción", hvRegion:"Por región", nFood:"Comida coreana", foodLead:"28 platos para probar en Corea, con su nombre en coreano para poder señalarlo, además de lugares para comer junto a su hotel y restaurantes internacionales en Seúl.", spotsH:"Para comer cerca del hotel", dishesH:"28 platos coreanos para probar", intlH:"¿Le apetece otra cosa? Restaurantes internacionales en Seúl", intlLead:"Una breve selección de restaurantes reconocidos de cocina china, japonesa, tailandesa, vietnamita, italiana, india y española. Reserve con antelación en los de gama alta.", intlNote:"Información de restaurantes revisada en noviembre de 2026 (Guía MICHELIN Seúl y otras fuentes públicas). Los horarios y las reservas cambian: compruébelos antes de ir.", photo:"Foto", foodPhNote:"Fotos de los platos: Wikimedia Commons, con las licencias libres indicadas en cada foto (pulse el crédito para ver el original). Cada restaurante presenta los platos a su manera.", spicy:"Picante", veg:"Vegetariano", vegOpt:"Opción vegetariana", nBeyond:"Más allá de Seúl", beyondLead:"¿Le quedan días en Corea? Estos son los destinos que más recomiendan las guías de viaje en español: historia, patrimonio de la UNESCO, gastronomía y naturaleza, todos accesibles desde Seúl en tren o con un vuelo corto. Pulse un destino para ver la distancia y la ruta en KTX, autobús o avión desde Seúl.", bmapNote:"Los tiempos del mapa son estimaciones de transporte público de Google. NAVER Map (en inglés) también muestra trenes KTX, autobuses exprés y vuelos; billetes de KTX: letskorail.com.", beyondNote:"Selección basada en los destinos más recomendados en las guías de viaje sobre Corea en español. Los tiempos de viaje son aproximados; consulte los horarios (Korail: letskorail.com) antes de salir.",
   gmap:"Google Maps ↗", dir:"Cómo llegar ↗", nmap:"NAVER Map ↗", onMap:"Ver en el mapa", info:"Más información ↗", gRoute:"Ruta en Google Maps ↗", nRoute:"NAVER Map (inglés) ↗", fromSeoul:k=>`≈ ${k} km de Seúl (en línea recta)`, kor:"Corea del Sur — pulse un destino para ver la ruta desde Seúl",
   schedNote:"Los horarios corresponden al plan actual y pueden cambiar. El organizador comunicará cualquier novedad.",
@@ -500,8 +534,8 @@ ko:{
        md:["<b>김포공항(GMP):</b> 공항철도로 서울역, 이후 4호선으로 명동역(약 45분).","<b>인천공항(ICN):</b> 공항철도로 서울역, 이후 4호선으로 명동역(모두 약 1시간 15분), 명동행 공항 리무진 버스, 또는 택시(교통 상황에 따라 약 1시간 이상)."]},
   stP:(h,st)=>`${h}에서 가까운 역: ${st}.`, stName:(n,l,m)=>`<b>${n}</b>(${l.join("·")}호선, 걸어서 약 ${m}분)`, atHotel:"숙소 호텔",
   greet:"서울에 오신 것을 환영합니다!", sub:"참가자 안내 · 2026년 11월 25–27일",
-  hotelK:"숙소", pick:"호텔 선택",
-  hotelNote:"묵는 호텔을 고르세요 — 이 페이지의 거리, 지도, 가까운 역, 공항에서 오는 길, 먹거리가 고른 호텔에 맞춰 바뀝니다(이 기기에 기억됩니다).",
+  hotelK:"숙소", pick:"호텔 선택", pickK:"숙소 호텔 · 눌러서 선택", zoneN:{ddp:"동대문 권역",md:"명동 권역"}, selected:"선택됨", sumSt:"가까운 지하철역", sumApt:"공항에서 오는 길", sumVen:"행사장까지", venL:{jw:"B2B 미팅·칵테일 · JW 메리어트 동대문 스퀘어",dure:"환영 만찬 · 두레(국립현대미술관 서울관)"}, b2bShort:"B2B 행사장", sameBldg:"같은 건물", updated:h=>`${h} 기준으로 바꿨습니다`, stL:x=>x.kr,
+  hotelNote:"묵는 호텔을 고르세요. 요약, 일정의 거리, 이동 안내, 먹거리, 지도가 고른 호텔 기준으로 바뀝니다. 고른 호텔은 이 기기에 기억됩니다.",
   nSched:"일정", nBefore:"출발 전 준비", nAround:"이동", nGood:"생활 정보", nDep:"출국", nTodo:"호텔 주변 볼거리", nHer:"세계유산", herLead:(p,n)=>`한국의 유네스코 세계유산 ${p}건 — 방문할 수 있는 ${n}곳과 서울에서의 거리. 장소를 누르면 서울에서 가는 경로가 지도에 나옵니다.`, herNote:"소요 시간은 대략입니다(서울역 기준, 제주는 김포공항 기준). 지도의 시간은 실시간 추정이라 낮 시간이 아니면 대기 시간이 길게 포함될 수 있습니다 — 시간표는 네이버 지도에서 확인하세요. 장소 목록은 AVIAREPS Korea가 네이버 지도에 정리한 것입니다. 일부 유산은 여기 실은 것보다 구성 요소가 많습니다(예: 조선왕릉 40기, 서원 9곳).", herMapHint:"대한민국 — 장소를 누르면 서울에서 가는 경로가 나옵니다", herCnt:n=>`방문할 곳 ${n}곳`, natural:"자연유산", cultural:"문화유산", hRoute:"서울 출발 경로(네이버 지도) ↗", nPl:"네이버 지도 장소 ↗", hvYear:"등재 연도순", hvRegion:"지역별", nFood:"한국 음식", foodLead:"한국에 있는 동안 맛볼 음식 28가지(한글 이름을 보여 주며 주문할 수 있게), 호텔 주변 먹거리, 서울의 해외 음식점.", spotsH:"호텔 주변 먹거리", dishesH:"꼭 맛볼 한국 음식 28가지", intlH:"다른 음식이 생각날 때 — 서울의 해외 음식점", intlLead:"평이 좋은 중식·일식·태국·베트남·이탈리아·인도·스페인 음식점을 추렸습니다. 고급 식당은 미리 예약하세요.", intlNote:"음식점 정보는 2026년 11월에 확인했습니다(미쉐린 가이드 서울 등 공개 자료). 영업시간과 예약 방법은 바뀔 수 있으니 가기 전에 확인하세요.", photo:"사진", foodPhNote:"음식 사진: 위키미디어 공용, 사진마다 표시한 자유 라이선스(표기를 누르면 원본). 식당마다 모양은 다를 수 있습니다.", spicy:"매운맛", veg:"채식", vegOpt:"채식 가능", nBeyond:"서울 밖 여행지", beyondLead:"한국에서 며칠 더 머문다면? 스페인어 여행 가이드가 가장 자주 추천하는 곳들입니다 — 역사, 유네스코 유산, 음식, 자연. 모두 서울에서 기차나 짧은 비행으로 갈 수 있습니다. 여행지를 누르면 거리와 서울에서 가는 KTX·버스·항공 경로가 나옵니다.", bmapNote:"지도의 소요 시간은 대중교통 추정치입니다. 네이버 지도에서 KTX·고속버스·항공편도 볼 수 있습니다. KTX 예매: letskorail.com.", beyondNote:"스페인어 한국 여행 가이드에서 가장 자주 추천되는 여행지를 기준으로 골랐습니다. 소요 시간은 대략이니 출발 전에 시간표(코레일: letskorail.com)를 확인하세요.",
   gmap:"구글 지도 ↗", dir:"길찾기 ↗", nmap:"네이버 지도 ↗", onMap:"지도에서 보기", info:"자세히 ↗", gRoute:"구글 지도 경로 ↗", nRoute:"네이버 지도 길찾기 ↗", fromSeoul:k=>`서울에서 직선거리 약 ${k}km`, kor:"대한민국 — 여행지를 누르면 서울에서 가는 경로가 나옵니다",
   schedNote:"시간은 현재 계획 기준이며 바뀔 수 있습니다. 바뀌면 주최 측이 알려 드립니다.",
@@ -628,18 +662,35 @@ function showMap(p,scroll){mapSel=p;const H={en:hName(),lat:hotel.lat,lng:hotel.
   if(scroll)$("mapbox").scrollIntoView({block:"start"})}
 const hotelPlace=()=>({en:hotel.en,ko:hotel.ko,lat:hotel.lat,lng:hotel.lng,label:hName(),z:16});
 
-/* ── header ── */
+/* ── header: hotel picker (radio cards) + summary of what this hotel changes ── */
+const dH=(h,p)=>hav(h.lat,h.lng,p.lat,p.lng);
+const lnB=l=>l.map(n=>`<span class="ln l${n}">${n}</span>`).join("");
+const vTxt=d=>d<0.05?t().atHotel:d>1.5?`${fmt(d)} · ${t().far}`:`${fmt(d)} · ${walk(d)}`;
+function nearStFor(h){return STATIONS.map(x=>({...x,d:dH(h,x)})).sort((a,b)=>a.d-b.d).filter((x,i)=>i<1||x.d<0.75).slice(0,3)}
 function renderHotel(){
-  $("hName").textContent=hName();
-  $("hAddr").innerHTML=isKo()?`${esc(hotel.addrKo)}<br><span class="note">${esc(hotel.addr)}</span>`:`${esc(hotel.addr)}<br><span class="note">${esc(hotel.addrKo)}</span>`;
-  const hp=hotelPlace();
-  $("hLinks").innerHTML=pair(`<a href="${gPlace(hp)}" target="_blank" rel="noopener">${t().gmap}</a>`,`<a href="https://map.naver.com/p/search/${enc(hotel.ko)}" target="_blank" rel="noopener">${t().nmap}</a>`)+`<button type="button" id="hOnMap">${t().onMap}</button>`;
+  const many=HOTELS.length>1,zone=hotel.zone||"ddp",V=VENUES.jw;
+  $("hList").hidden=!many;$("hxNote").hidden=!many;$("hxK").innerHTML=many?t().pickK:t().hotelK;
+  if(many){const zs=["ddp","md"].filter(z=>HOTELS.some(h=>(h.zone||"ddp")===z));
+    $("hList").innerHTML=zs.map(z=>`<div class="zn">${t().zoneN[z]}</div>`+HOTELS.filter(h=>(h.zone||"ddp")===z).sort((a,b)=>dH(a,V)-dH(b,V)).map(h=>{const x=nearStFor(h)[0],vd=dH(h,V),on=h===hotel;
+      return `<label class="ho${on?" on":""}"><input type="radio" name="hotelPick" value="${h.id}"${on?" checked":""}><span class="dot" aria-hidden="true"></span><span class="nm">${esc(isKo()?h.ko:h.en)}</span><span class="mt">${lnB(x.l)} ${esc(t().stL(x))} · ${t().walk(walkMin(x.d))} · ${t().b2bShort} ${vd<0.05?t().sameBldg:fmt(vd)}</span></label>`}).join("")).join("")}
+  const hp=hotelPlace(),st=nearStFor(hotel);
+  $("hSum").innerHTML=`<div class="hx-top"><span class="tag hot">${many?t().selected+" · ":""}${t().zoneN[zone]}</span><div class="hx-nm">${esc(hName())}</div>
+    <div class="hx-ad">${isKo()?`${esc(hotel.addrKo)}<br><span class="note">${esc(hotel.addr)}</span>`:`${esc(hotel.addr)}<br><span class="note">${esc(hotel.addrKo)}</span>`}</div>
+    <div class="lk">${pair(`<a href="${gPlace(hp)}" target="_blank" rel="noopener">${t().gmap}</a>`,`<a href="https://map.naver.com/p/search/${enc(hotel.ko)}" target="_blank" rel="noopener">${t().nmap}</a>`)}<button type="button" id="hOnMap">${t().onMap}</button></div></div>
+    <dl class="hx-rows">
+      <div><dt>${t().sumSt}</dt><dd><ul>${st.map(x=>`<li>${lnB(x.l)} <b>${esc(t().stL(x))}</b> <span class="hx-mut">· ${t().walk(walkMin(x.d))}</span></li>`).join("")}</ul></dd></div>
+      <div><dt>${t().sumApt}</dt><dd><ul>${t().apt[zone].map(x=>`<li>${x}</li>`).join("")}</ul></dd></div>
+      <div><dt>${t().sumVen}</dt><dd><ul>${Object.keys(VENUES).map(k=>`<li><b>${t().venL[k]||esc(isKo()?VENUES[k].ko:VENUES[k].en)}</b><br><span class="hx-mut">${vTxt(dH(hotel,VENUES[k]))}</span></li>`).join("")}</ul></dd></div>
+    </dl>`;
   $("hOnMap").onclick=()=>{document.getElementById("todo").scrollIntoView();showMap(hotelPlace(),false)};
-  const sel=$("hotelSel"),many=HOTELS.length>1;sel.hidden=!many;$("hName").hidden=many;
-  if(many){sel.setAttribute("aria-label",t().pick);sel.title=t().pick;sel.innerHTML=HOTELS.map(h=>`<option value="${h.id}"${h===hotel?" selected":""}>${esc(isKo()?h.ko:h.en)}</option>`).join("")}
 }
-$("hotelSel").addEventListener("change",e=>{hotel=HOTELS.find(h=>h.id===e.target.value)||HOTELS[0];store.set("stmHotel",hotel.id);mapSel=null;
-  try{const u=new URL(location.href);u.searchParams.set("hotel",hotel.id);history.replaceState(null,"",u)}catch(x){}renderAll()});
+let toastT=0;
+function toast(msg){const el=$("toast");el.textContent=msg;el.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>{el.hidden=true},2600)}
+$("hList").addEventListener("change",e=>{const r=e.target.closest('input[name="hotelPick"]');if(!r)return;
+  hotel=HOTELS.find(h=>h.id===r.value)||HOTELS[0];store.set("stmHotel",hotel.id);mapSel=null;
+  try{const u=new URL(location.href);u.searchParams.set("hotel",hotel.id);history.replaceState(null,"",u)}catch(x){}
+  renderAll();const c=document.querySelector('#hList input:checked');if(c)c.focus({preventScroll:true});
+  toast(t().updated(hName()));const m=$("hSum");m.classList.remove("flash");void m.offsetWidth;m.classList.add("flash")});
 
 /* ── schedule & info ── */
 function renderSchedule(){
@@ -651,7 +702,7 @@ function cards(arr){return arr.map(c=>`<div class="ic${c.req?" req":""}"><div cl
 
 /* ── hotel-dependent "Getting around" cards ── */
 const walkMin=d=>Math.max(1,Math.round(d*1.3/4.5*60));
-function nearSt(){return STATIONS.map(x=>({...x,d:hav(hotel.lat,hotel.lng,x.lat,x.lng)})).sort((a,b)=>a.d-b.d).filter((x,i)=>i<1||x.d<0.75).slice(0,3)}
+function nearSt(){return nearStFor(hotel)}
 function aroundFor(){const A=t().around.map(c=>({...c}));
   A[0].list=[...t().apt[hotel.zone||"ddp"],A[0].list[A[0].list.length-1]];
   A[1].p=t().stP(esc(hName()),nearSt().map(x=>t().stName(isKo()?x.kr:x.en,x.l,walkMin(x.d))).join(isKo()?", ":"; "));
